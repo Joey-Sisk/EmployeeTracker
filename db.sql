@@ -9,6 +9,7 @@ CREATE TABLE employee_db (
     last_name VARCHAR(30);
     role_id INT NULL;
     manager_id INT NOT NULL;
+    is_manager BOOLEAN DEFAULT FALSE,
     PRIMARY KEY (position)
 );
 
@@ -28,7 +29,16 @@ SELECT * FROM employee_manager_db
 
 --------------------------------------
 
+-- TRUNCATE TABLE role_db; ~~to clear out info~~
+
+INSERT INTO department_db (name, id) VALUES ("sales", 100);
+INSERT INTO department_db (name, id) VALUES ("hr", 200);
+INSERT INTO department_db (name, id) VALUES ("accounting", 300);
+INSERT INTO department_db (name, id) VALUES ("it", 400);
+INSERT INTO department_db (name, id) VALUES ("legal", 500)
+
 -- add departments, roles, employee's
+INSERT INTO employee_db (first_name, last_name, role_id, manager_id ,is_manager) VALUES (?, ?, ?, ?, ?);
 
 -- view departments, roles, employee's
 SELECT *
@@ -41,10 +51,15 @@ SELECT *
 FROM employee_db
 
 -- update roles
+SELECT title, first_name, last_name
+FROM role_db
+LEFT JOIN employee_db
+ON 
 
 -- bonus: update employee managers
 
 -- bonus: view employees by manager
+    -- innerjoin?
 
 -- bonus: delete departments, roles, and employees
 
