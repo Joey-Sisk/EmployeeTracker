@@ -1,4 +1,4 @@
-const mysql = require("mysql");
+const mysql = require("mysql2");
 
 const [
   VIEW_EMPLOYEES,
@@ -7,6 +7,20 @@ const [
   ADD_EMPLOYEE,
   REMOVE_EMPLOYEE,
 ] = require("./lib/const");
+
+const {
+  promptChoices,
+  promptAddEmployee,
+  promptRemoveEmployee,
+} = require("./lib/prompts");
+
+const {
+  addNewEmployee,
+  viewEmployees,
+  viewADepartment,
+  viewARoles,
+  removeAnEmployee,
+} = require("./lib/queries");
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -21,7 +35,7 @@ connection.connect(async (err) => {
   if (err) throw err;
   console.log("connected as id " + connection.threadId);
   await startApp();
-  connection.end();
+  // connection.end();
 });
 
 // function which prompts the user for what action they should take
@@ -31,14 +45,14 @@ async function startApp() {
   answer = await promptChoices();
 
   switch (answer.name) {
+    case VIEW_EMPLOYEES:
+      viewEmployees(connection);
+      break;
     case VIEW_DEPARTMENTS:
-      viewADepartment();
+      viewADepartment(connection);
       break;
     case VIEW_ROLES:
-      viewARoles();
-      break;
-    case VIEW_EMPLOYEES:
-      viewEmployees();
+      viewARoles(connection);
       break;
     case ADD_EMPLOYEE:
       newEmp = await promptAddEmployee();
@@ -52,8 +66,8 @@ async function startApp() {
       );
       break;
     case REMOVE_EMPLOYEE:
-      remEmp = await promptRemoveEmployee();
-      removeAnEmployee();
+      remEmp = await promptRemoveEmployee(connection);
+      removeAnEmployee(connection, employeeId);
       break;
   }
 }
