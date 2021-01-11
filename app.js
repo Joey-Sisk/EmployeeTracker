@@ -63,11 +63,11 @@ async function startApp() {
     employee_full_name,
     removeEmployee,
     newDep,
-    departments,
-    departmentNames,
     newRole,
-    newDepartmentId,
-    salaryInt;
+    salaryInt,
+    deps,
+    depNames,
+    newRoleDepartment;
 
   answer = await promptChoices();
 
@@ -118,26 +118,21 @@ async function startApp() {
       startApp();
       break;
     case ADD_ROLE:
-      // roles = await getRoles(connection);
-      // roleTitles = roles.map((role) => role.title);
-      // newEmp = await promptAddEmployee(roleTitles, managersFullName);
-      // newEmployeeRole = roles.find((role) => role.title === newEmp.role_title);
-
-      departments = await getDepartments(connection);
-      departmentNames = departments.map((department) => department.name);
-      newRole = await promptAddRole(departmentNames);
-      console.log(newRole.department_name);
-      newDepartmentId = departments.find(
-        (department) => department.name === newRole.department_name
+      
+      deps = await getDepartments(connection);
+      depNames = deps.map((dep) => dep.name);
+      newRole = await promptAddRole(depNames);
+      newRoleDepartment = deps.find(
+        (dep) => dep.name === newRole.department_name
       );
 
       salaryInt = parseInt(newRole.salary);
 
       await addNewRole(
         connection,
-        newRole.role_name,
+        newRole.roleName,
         salaryInt,
-        newDepartmentId
+        newRoleDepartment
       );
       startApp();
       break;
