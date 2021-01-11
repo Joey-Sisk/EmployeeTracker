@@ -49,9 +49,9 @@ VALUES
 
 INSERT INTO employee_db (first_name, last_name, role_id, manager_id, is_manager)
 VALUES
-("Piper", "Sisk", 1, null, true), -- 1
-("Spencer", "Carlson", 2, null, true), -- 2
-("Oscar", "Charland", 3, null, true), -- 3
+("Piper", "Sisk", 1, 0, true), -- 1
+("Spencer", "Carlson", 2, 0, true), -- 2
+("Oscar", "Charland", 3, 0, true), -- 3
 ("Jefferson", "Ellinger", 5, 1, false), -- 4
 ("Tyler", "Mappes", 6, 2, false), -- 5
 ("Alex", "Windhelm", 7, 3, false), -- 6
