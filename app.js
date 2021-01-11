@@ -8,6 +8,8 @@ const [
   ADD_DEPARTMENT,
   ADD_ROLE,
   REMOVE_EMPLOYEE,
+  REMOVE_DEPARTMENT,
+  REMOVE_ROLE,
 ] = require("./lib/const");
 
 const {
@@ -16,6 +18,7 @@ const {
   promptAddDepartment,
   promptAddRole,
   promptRemoveEmployee,
+  promptRemoveDepartment
 } = require("./lib/prompts");
 
 const {
@@ -118,7 +121,6 @@ async function startApp() {
       startApp();
       break;
     case ADD_ROLE:
-      
       deps = await getDepartments(connection);
       depNames = deps.map((dep) => dep.name);
       newRole = await promptAddRole(depNames);
@@ -137,6 +139,30 @@ async function startApp() {
       startApp();
       break;
     case REMOVE_EMPLOYEE:
+      employees_row = await findEmployees(connection);
+      choiceArray = employees_row.map(
+        (employee) => `${employee.first_name} ${employee.last_name}`
+      );
+      employee_full_name = await promptRemoveEmployee(choiceArray);
+      removeEmployee = employees_row.find(
+        (employee) =>
+          `${employee.first_name} ${employee.last_name}` === employee_full_name
+      );
+      // missing last function calls. removeAnEmployee() and startApp()
+      deleteEmployee = await removeAnEmployee(connvection, removeEmployee);
+      startApp();
+    case REMOVE_DEPARTMENT:
+      deps = await getDepartments(connection);
+      depNames = deps.map((dep) => dep.name);
+      remRole = await promptRemoveDepartment(depNames);
+      newRole = await promptAddRole(depNames);
+      newRoleDepartment = deps.find(
+        (dep) => dep.name === newRole.department_name
+      );
+      removeDepartment = await removeADepartment(connection, departmentId);
+      startApp();
+      break;
+    case REMOVE_ROLE:
       employees_row = await findEmployees(connection);
       choiceArray = employees_row.map(
         (employee) => `${employee.first_name} ${employee.last_name}`
