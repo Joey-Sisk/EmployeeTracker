@@ -18,7 +18,8 @@ const {
   promptAddDepartment,
   promptAddRole,
   promptRemoveEmployee,
-  promptRemoveDepartment
+  promptRemoveDepartment,
+  promptRemoveRole,
 } = require("./lib/prompts");
 
 const {
@@ -33,6 +34,8 @@ const {
   getRoles,
   getManagers,
   getDepartments,
+  removeADepartment,
+  removeARole,
 } = require("./lib/queries");
 
 const connection = mysql.createConnection({
@@ -52,7 +55,7 @@ connection.connect(async (err) => {
 
 // function which prompts the user for what action they should take
 async function startApp() {
-  let answer,
+  let answer, // given more time i would reduce this clutter and put more of these in functions
     roles,
     roleTitles,
     managers,
@@ -68,9 +71,14 @@ async function startApp() {
     newDep,
     newRole,
     salaryInt,
-    deps,
     depNames,
-    newRoleDepartment;
+    newRoleDepartment,
+    deps,
+    remDep,
+    whichRoleId,
+    roleRows,
+    roleNames,
+    remRole;
 
   answer = await promptChoices();
 
@@ -148,32 +156,23 @@ async function startApp() {
         (employee) =>
           `${employee.first_name} ${employee.last_name}` === employee_full_name
       );
-      // missing last function calls. removeAnEmployee() and startApp()
-      deleteEmployee = await removeAnEmployee(connvection, removeEmployee);
+      await removeAnEmployee(connection, removeEmployee.id);
       startApp();
     case REMOVE_DEPARTMENT:
       deps = await getDepartments(connection);
       depNames = deps.map((dep) => dep.name);
-      remRole = await promptRemoveDepartment(depNames);
-      newRole = await promptAddRole(depNames);
-      newRoleDepartment = deps.find(
-        (dep) => dep.name === newRole.department_name
-      );
-      removeDepartment = await removeADepartment(connection, departmentId);
+      remDep = await promptRemoveDepartment(depNames);
+      whichRoleId = deps.find((dep) => dep.name === remDep.dep_name);
+      await removeADepartment(connection, whichRoleId.id);
       startApp();
       break;
     case REMOVE_ROLE:
-      employees_row = await findEmployees(connection);
-      choiceArray = employees_row.map(
-        (employee) => `${employee.first_name} ${employee.last_name}`
-      );
-      employee_full_name = await promptRemoveEmployee(choiceArray);
-      removeEmployee = employees_row.find(
-        (employee) =>
-          `${employee.first_name} ${employee.last_name}` === employee_full_name
-      );
-
-      await removeAnEmployee(connection, removeEmployee.id);
+      roleRows = await getRoles(connection);
+      roleNames = roleRows.map((role) => role.title);
+      remRole = await promptRemoveRole(roleNames);
+      whichRoleId = roleRows.find((role) => role.title === remRole.role_name);
+      console.log(whichRoleId);
+      await removeARole(connection, whichRoleId.id);
       startApp();
       break;
     default:
