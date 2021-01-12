@@ -25,9 +25,9 @@ This node.js based program is designed to run a CLI program that allows the user
 
 ## Screenshot
 
-![First Screenshot](./images/screenshot3.png)
-![Second Screenshot](./images/screenshot.png)
-![Third Screenshot](./images/screenshot2.png)
+![First Screenshot](./images/screenshot1.png)
+![Second Screenshot](./images/screenshot2.png)
+![Third Screenshot](./images/screenshot3.png)
 
 ## Video
 
