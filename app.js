@@ -149,7 +149,7 @@ async function startApp() {
         connection,
         newRole.roleName,
         salaryInt,
-        newRoleDepartment
+        newRoleDepartment.id
       );
       startApp();
       break;
@@ -202,7 +202,6 @@ async function startApp() {
       roleNames = roleRows.map((role) => role.title);
       remRole = await promptRemoveRole(roleNames);
       whichRoleId = roleRows.find((role) => role.title === remRole.role_name);
-      console.log(whichRoleId);
       await removeARole(connection, whichRoleId.id);
       startApp();
       break;
